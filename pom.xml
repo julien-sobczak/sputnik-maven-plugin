@@ -55,7 +55,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>pl.touk</groupId>
-			<artifactId>maven-sonar-codereview-plugin</artifactId>
+			<artifactId>sputnik</artifactId>
 			<version>1.4.1-SNAPSHOT</version>
 			<exclusions>
 				<!-- [ERROR] Failed to execute goal on project sputnik-maven-plugin: 

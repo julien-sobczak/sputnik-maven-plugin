@@ -18,8 +18,9 @@ package org.eu.ingwar.maven.sputnik;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import pl.touk.sputnik.Connectors;
+
 import pl.touk.sputnik.configuration.CliOption;
+import pl.touk.sputnik.connector.ConnectorType;
 
 /**
  * Mojo class for gerrit connector.
@@ -38,8 +39,8 @@ public class GerritConnectorMojo extends SputnikAbstractMojo {
     private String revisionId;
 
     @Override
-    protected Connectors getConnector() {
-        return Connectors.GERRIT;
+    protected ConnectorType getConnectorType() {
+        return ConnectorType.GERRIT;
     }
 
     @Override

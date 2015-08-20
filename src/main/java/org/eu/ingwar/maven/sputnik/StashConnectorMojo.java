@@ -18,9 +18,10 @@ package org.eu.ingwar.maven.sputnik;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import pl.touk.sputnik.Connectors;
+
 import pl.touk.sputnik.configuration.CliOption;
 import pl.touk.sputnik.configuration.GeneralOption;
+import pl.touk.sputnik.connector.ConnectorType;
 
 /**
  * Mojo class for connector connector.
@@ -42,8 +43,8 @@ public class StashConnectorMojo extends SputnikAbstractMojo {
     private String connectorRepositorySlug;
 
     @Override
-    protected Connectors getConnector() {
-        return Connectors.STASH;
+    protected ConnectorType getConnectorType() {
+        return ConnectorType.STASH;
     }
 
     @Override

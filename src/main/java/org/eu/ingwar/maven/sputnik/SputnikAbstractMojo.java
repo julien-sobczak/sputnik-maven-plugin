@@ -16,17 +16,19 @@
 package org.eu.ingwar.maven.sputnik;
 
 import java.util.Properties;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
-import pl.touk.sputnik.Connectors;
+
 import pl.touk.sputnik.configuration.ConfigurationHolder;
 import pl.touk.sputnik.configuration.ConfigurationOption;
 import pl.touk.sputnik.configuration.GeneralOption;
 import pl.touk.sputnik.connector.ConnectorFacade;
 import pl.touk.sputnik.connector.ConnectorFacadeFactory;
-import pl.touk.sputnik.review.Engine;
+import pl.touk.sputnik.connector.ConnectorType;
+import pl.touk.sputnik.engine.Engine;
 
 /**
  * Abstract Mojo for all sputnik connectors.
@@ -40,6 +42,9 @@ public abstract class SputnikAbstractMojo extends AbstractMojo {
     
     @Parameter(property = "sputnik.connector.port")
     private String connectorPort;
+    
+    @Parameter(property = "sputnik.connector.path")
+    private String connectorPath;
     
     @Parameter(property = "sputnik.connector.useHttps")
     private String connectorUseHttps;
@@ -86,16 +91,59 @@ public abstract class SputnikAbstractMojo extends AbstractMojo {
     @Parameter(property = "sputnik.scalastyle.configurationFile")
     private String scalastyleConfigurationFile;
 
+    @Parameter(property = "sputnik.codenarc.enabled")
+    private String codeNarcEnabled;
 
+    @Parameter(property = "sputnik.codenarc.ruleSets")
+    private String codeNarcRuleset;
+    
+    @Parameter(property = "sputnik.codenarc.excludes")
+    private String codeNarcExcludes;
+
+    @Parameter(property = "sputnik.jslint.enabled")
+    private String jslintEnabled;
+
+    @Parameter(property = "sputnik.jshint.enabled")
+    private String jshintEnabled;
+
+    @Parameter(property = "sputnik.jshint.configurationFile")
+    private String jshintConfigurationFile;
+    
+    @Parameter(property = "sputnik.sonar.enabled")
+    private String sonarEnabled;
+
+    @Parameter(property = "sputnik.sonar.configurationFiles")
+    private String sonarProperties;
+
+    @Parameter(property = "sputnik.sonar.verbose")
+    private String sonarVerbose;
+   
+    @Parameter(property = "sputnik.score.strategy")
+    private String scoreStrategy;
+
+    @Parameter(property = "sputnik.score.passingKey")
+    private String scorePassingKey;
+
+    @Parameter(property = "sputnik.score.passingValue")
+    private String scorePassingValue;
+
+    @Parameter(property = "sputnik.score.failingKey")
+    private String scoreFailingKey;
+
+    @Parameter(property = "sputnik.score.failingValue")
+    private String scoreFailingValue;
+  
+    
     private Properties sputnikProperties = new Properties();
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        setConnectorProperty(GeneralOption.CONNECTOR_TYPE, getConnector().name().toLowerCase());
+        setConnectorProperty(GeneralOption.CONNECTOR_TYPE, getConnectorType().getName());
 
         setConnectorProperty(GeneralOption.HOST, connectorHost);
         setConnectorProperty(GeneralOption.PORT, connectorPort);
+        setConnectorProperty(GeneralOption.PATH, connectorPath);
         setConnectorProperty(GeneralOption.USE_HTTPS, connectorUseHttps);
         setConnectorProperty(GeneralOption.USERNAME, connectorUsername);
         setConnectorProperty(GeneralOption.PASSWORD, connectorPassword);
@@ -117,10 +165,29 @@ public abstract class SputnikAbstractMojo extends AbstractMojo {
         setConnectorProperty(GeneralOption.SCALASTYLE_ENABLED, scalastyleEnabled);
         setConnectorProperty(GeneralOption.SCALASTYLE_CONFIGURATION_FILE, scalastyleConfigurationFile);
         
+        setConnectorProperty(GeneralOption.CODE_NARC_ENABLED, codeNarcEnabled);
+        setConnectorProperty(GeneralOption.CODE_NARC_RULESET, codeNarcRuleset);
+        setConnectorProperty(GeneralOption.CODE_NARC_EXCLUDES, codeNarcExcludes);
+        
+        setConnectorProperty(GeneralOption.JSLINT_ENABLED, jslintEnabled);
+        setConnectorProperty(GeneralOption.JSHINT_ENABLED, jshintEnabled);
+        setConnectorProperty(GeneralOption.JSHINT_CONFIGURATION_FILE, jshintConfigurationFile);
+        
+        setConnectorProperty(GeneralOption.SONAR_ENABLED, sonarEnabled);
+        setConnectorProperty(GeneralOption.SONAR_PROPERTIES, sonarProperties);
+        setConnectorProperty(GeneralOption.SONAR_VERBOSE, sonarVerbose);
+       
+        setConnectorProperty(GeneralOption.SCORE_STRATEGY, scoreStrategy);
+        setConnectorProperty(GeneralOption.SCORE_PASSING_KEY, scorePassingKey);
+        setConnectorProperty(GeneralOption.SCORE_PASSING_VALUE, scorePassingValue);
+        setConnectorProperty(GeneralOption.SCORE_FAILING_KEY, scoreFailingKey);
+        setConnectorProperty(GeneralOption.SCORE_FAILING_VALUE, scoreFailingValue);
+      
+        
         setConnectorProperties();
 
         ConfigurationHolder.initFromProperties(sputnikProperties);
-        ConnectorFacade facade = ConnectorFacadeFactory.INSTANCE.build(ConfigurationHolder.instance().getProperty(GeneralOption.CONNECTOR_TYPE));
+        ConnectorFacade facade = ConnectorFacadeFactory.INSTANCE.build(getConnectorType());
         new Engine(facade).run();
 
     }
@@ -131,6 +198,6 @@ public abstract class SputnikAbstractMojo extends AbstractMojo {
         }
     }
 
-    protected abstract Connectors getConnector();
+    protected abstract ConnectorType getConnectorType();
     protected abstract void setConnectorProperties();
 }

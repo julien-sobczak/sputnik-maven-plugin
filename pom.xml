@@ -62,7 +62,7 @@
         <dependency>
             <groupId>pl.touk</groupId>
             <artifactId>sputnik</artifactId>
-		    <version>1.4.0</version>
+		    <version>1.4.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>

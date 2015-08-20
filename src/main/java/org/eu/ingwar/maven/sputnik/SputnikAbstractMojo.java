@@ -22,7 +22,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import pl.touk.sputnik.configuration.ConfigurationHolder;
+import pl.touk.sputnik.configuration.Configuration;
+import pl.touk.sputnik.configuration.ConfigurationBuilder;
 import pl.touk.sputnik.configuration.ConfigurationOption;
 import pl.touk.sputnik.configuration.GeneralOption;
 import pl.touk.sputnik.connector.ConnectorFacade;
@@ -186,9 +187,9 @@ public abstract class SputnikAbstractMojo extends AbstractMojo {
         
         setConnectorProperties();
 
-        ConfigurationHolder.initFromProperties(sputnikProperties);
-        ConnectorFacade facade = ConnectorFacadeFactory.INSTANCE.build(getConnectorType());
-        new Engine(facade).run();
+        Configuration configuration = ConfigurationBuilder.initFromProperties(sputnikProperties);
+        ConnectorFacade facade = ConnectorFacadeFactory.INSTANCE.build(getConnectorType(), configuration);
+        new Engine(facade, configuration).run();
 
     }
     

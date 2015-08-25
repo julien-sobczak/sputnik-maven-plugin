@@ -183,6 +183,8 @@ public abstract class SputnikAbstractMojo extends AbstractMojo {
         setConnectorProperty(GeneralOption.SCORE_PASSING_VALUE, scorePassingValue);
         setConnectorProperty(GeneralOption.SCORE_FAILING_KEY, scoreFailingKey);
         setConnectorProperty(GeneralOption.SCORE_FAILING_VALUE, scoreFailingValue);
+        
+        System.out.println("Score strategy=" + scoreStrategy);
       
         
         setConnectorProperties();
